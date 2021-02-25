@@ -1,9 +1,5 @@
 <?php
-
-// define database information
-define('DB_HOST', 'localhost');
-define('DB_USER', 'root');
-define('DB_PASS', 'root');
-define('DB_NAME', 'remco_test');
-
- ?>
+ define('DB_HOST', 'localhost');
+define('DB_USER', '{username}');
+define('DB_PASS', '{password}');
+define('DB_NAME', '{db_name}');

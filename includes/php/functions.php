@@ -3,13 +3,14 @@
 session_start();
 ob_start();
 
+require_once(__dir__."/config.php");
 require_once(__dir__."/class/Login.php");
 
 function db_make_connection(){
-	$db_servername = 'localhost';
-	$db_username = 'remco';
-	$db_password = 'remco';
-	$db_name = 'remco_test';
+	$db_servername = DB_HOST;
+	$db_username = DB_USER;
+	$db_password = DB_PASS;
+	$db_name = DB_NAME;
 
 	// Create connection
 	$connection = new mysqli($db_servername, $db_username, $db_password, $db_name);
