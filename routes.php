@@ -1,18 +1,20 @@
 <?php
 
 $request = Request::url();
+$content = new Content;
 
 $check =  false;
 
+
 // check for all routes
 if($request == '/'){
-    Content::set('home');
+    $content->set('home')->title('Home screen');
 }else if($request == '/login/'){
-    Content::set('login');
+    $content->set('login')->title('Login screen');
 }else if($request == '/register/'){
-    Content::set('register');
+    $content->set('register')->title('Register screen');
 }else{
-    Content::set('404');
+    $content->set('404')->title('404 NOT FOUND');
 }
 
 

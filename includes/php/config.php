@@ -9,6 +9,7 @@ define('DB_HOST', 'localhost');
 define('DB_USER', '{username}');
 define('DB_PASS', '{password}');
 define('DB_NAME', '{db_name}');
+define('COMPANY_NAME', '{company_name}');
 // debug mode
 define('DEBUG_MODE', true);
 

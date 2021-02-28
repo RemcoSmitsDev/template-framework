@@ -20,6 +20,9 @@ class Request
         if(empty($options)){
             return Response::return(false);
         }
+        if(is_string($options)){
+            $options = [$options];
+        }
         switch ($type) {
             case 'post':
                 foreach ($options as $value) {
@@ -56,8 +59,25 @@ class Request
         return Response::return(true);
     }
 
+    public static function get(string $type, string $name){
+        switch ($type) {
+            case 'post':
+                return $_POST[$name];
+                break;
+            case 'get':
+                return $_GET[$name];
+                break;
+            case 'global':
+                return $GLOBALS[$name];
+                break;
+            default:
+                return '';
+                break;
+        }
+    }
+
     public static function url(){
-        return $GLOBALS['request'] = explode('?', $_SERVER['REQUEST_URI'], 2)[0];
+        return $GLOBALS['request'] = urldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
     }
 }
 
