@@ -18,35 +18,46 @@ class Request
 
     public static function check($type = 'post', $options = []){
         if(empty($options)){
-            return Response::return(false,400);
+            return Response::return(false);
         }
         switch ($type) {
             case 'post':
                 foreach ($options as $value) {
                     if(!isset($_POST[$value])){
-                        return Response::return(false,400);
+                        return Response::return(false);
                     }
                 }
                 break;
             case 'get':
                 foreach ($options as $value) {
                     if(!isset($_GET[$value])){
-                        return Response::return(false,400);
+                        return Response::return(false);
                     }
                 }
                 break;
-            case 'cookie':
+            case 'global':
                 foreach ($options as $value) {
-                    if(!isset($_COOKIE[$value])){
-                        return Response::return(false,400);
+                    if(!isset($GLOBALS[$value])){
+                        return Response::return(false);
+                    }
+                }
+                break;
+            case 'session':
+                foreach ($options as $value) {
+                    if(!isset($_SESSION[$value])){
+                        return Response::return(false);
                     }
                 }
                 break;
             default:
-                return Response::return(false,400);
+                return Response::return(false);
                 break;
         }
-        return Response::return(true,200);
+        return Response::return(true);
+    }
+
+    public static function url(){
+        return $GLOBALS['request'] = explode('?', $_SERVER['REQUEST_URI'], 2)[0];
     }
 }
 

@@ -9,6 +9,10 @@ class response
         http_response_code($code);
         return $value;
     }
+
+    public static function refresh(){
+        header("Refresh:0;");
+    }
 }
 
 

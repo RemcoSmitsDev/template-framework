@@ -1,7 +1,6 @@
 <?php
 // define session
 session_start();
-ob_start();
 
 require_once(__dir__."/config.php");
 
@@ -15,11 +14,6 @@ function get_header() {
 
 function get_footer() {
 	require_once("footer.php");
-}
-
-function get_content($content) {
-	//include file
-	require_once($_SERVER['DOCUMENT_ROOT'] . "/templates/content-templates/$content.php");
 }
 
 function get_cookies() {

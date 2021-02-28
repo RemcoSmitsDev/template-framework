@@ -28,26 +28,18 @@ class User
     public static function logout(){
         session_destroy();
         unset($_SESSION['_user']);
-        self::removeUserToken();
+        Cookie::remove('email','token');
         header("Location: /login/");
         exit;
     }
 
-    public static function removeUserToken(){
-        unset($_COOKIE['email']);
-        unset($_COOKIE['token']);
-        setcookie('email', null, -1, '/');
-        setcookie('token', null, -1, '/');
-    }
-
     public static function updateUserSession($user){
         $_SESSION['_user'] = $user;
-        self::updateTokenSession($user->Email,$user->Password);
     }
 
     public static function updateTokenSession(string $email, string $token){
-        setcookie("email", $email,time() + (10 * 365 * 24 * 60 * 60), "/");
-        setcookie("token", $token,time() + (10 * 365 * 24 * 60 * 60), "/");
+        Cookie::set('email',$email);
+        Cookie::set('token',$token);
     }
 
     public function getUserByEmail(string $email){
@@ -55,26 +47,24 @@ class User
         $this->db->bind(':email',$email);
 
         if($res = $this->db->single()){
-            http_response_code(200);
-            return $res;
+            return Response::return($res,200);;
         }else{
-            http_response_code(400);
-            return false;
+            return Response::return(false,400);
         }
     }
 
     public static function is_loggedin(){
-        if(isset($_SESSION['_user'])){
-            return true;
+        if(Request::check('session',['_user'])){
+            return Response::return(true);
         }else{
-            return false;
+            return Response::return(false);
         }
     }
 
     public function removeAccount(){
         // check if there is a user loggedin
-        if(!isset($_SESSION['_user'])){
-            return Response::return('You must be loggedin!ß',400);
+        if(!self::is_loggedin()){
+            return Response::return('You must be loggedin!',400);
         }
 
         // check if there are some changes
@@ -83,7 +73,7 @@ class User
 
         // exec query
         if($this->db->execute()){
-            self::removeUserToken();
+            Cookie::remove('email','token');
             self::logout();
             return Response::return('Account verwijderd!',200);
         }else{

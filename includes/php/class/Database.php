@@ -1,5 +1,5 @@
 <?php
-require_once($_SERVER['DOCUMENT_ROOT']."/includes/php/config.php");
+// require_once($_SERVER['DOCUMENT_ROOT']."/includes/php/config.php");
 
 class Database
 {

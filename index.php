@@ -1,34 +1,17 @@
 <?php
-require_once('includes/php/functions.php');
-//Get request URI
-$request = $_SERVER['REQUEST_URI'];
+require_once(__DIR__.'/includes/php/functions.php');
 
-//Enable get
-$arr = explode('?', $request, 2);
-$request = $GLOBALS['request'] = $arr[0];
-
-global $CONTENT;
-$check =  false;
-
-// auto login function if there is no user logged in
-if(!User::is_loggedin()){
-    Login::Autologin();
-}else{
-    echo "loggedin";
+// auto login function if there is no user logged in and check if there is an for email and token
+if(!User::is_loggedin() && Cookie::check('token','email')){
+    (new Login)->Autologin();
 }
 
-if($request == '/'){
-    $CONTENT = 'home';
-}else if($request == '/login/'){
-    $CONTENT = 'login';
-}else if($request == '/register/'){
-    $CONTENT = 'register';
-}else{
-    $CONTENT = '404';
-}
+// check all routes
+require_once(__DIR__.'/routes.php');
 
-if(isset($_SESSION['_user'])){
-    require __DIR__ . '/templates/roles/user/page.php';
+// check if there is a user loggedin then show the right layout
+if(User::is_loggedin()){
+    require_once(__DIR__ . '/templates/roles/user/page.php');
 }else{
-    require __DIR__ . '/templates/roles/guest/page.php';
+    require_once(__DIR__ . '/templates/roles/guest/page.php');
 }

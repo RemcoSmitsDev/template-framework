@@ -18,16 +18,16 @@ class Login
     }
 
     private function updateToken(){
-        $this->_token = Hash::unique();
+        $new_token = Hash::unique();
 
         $this->db->query("UPDATE users SET Token = :token WHERE Email = :email LIMIT 1");
-        $this->db->bind(':token',$this->_token);
+        $this->db->bind(':token',$new_token);
         $this->db->bind(':email',$this->_email);
         $this->db->execute();
 
-        User::updateTokenSession($this->_email,$this->_token);
+        User::updateTokenSession($this->_email,$new_token);
 
-        return $this->_token;
+        return $new_token;
     }
 
     public function login(string $email, string $password){
@@ -58,60 +58,61 @@ class Login
         // set session logged in succesfully
         if(Validate::password($this->_user->Password,$password,$this->_user->Salt)){
             User::updateUserSession($this->_user);
-            return Response::return('loggedin',200);
+            $this->updateToken();
+            return Response::return('loggedin');
         }else{
             return Response::return('Wrong password by email!',404);
         }
     }
 
-    private function checkUserWithToken(){
+    public function checkUserWithToken(){
 
         $this->db->query("SELECT * FROM users WHERE Email = :email AND Token = :token LIMIT 1");
         $this->db->bind(':email',$this->_email);
         $this->db->bind(':token',$this->_token);
 
         if($this->db->rowCount() > 0){
-            return Response::return(true,200);
+            return Response::return(true);
         }else{
-            return Response::return(false,400);
+            return Response::return(false);
         }
     }
 
     protected function loginUsingCookieToken() {
         // check if there exist an user with this email
-        if(!$this->_user = User::getUserByEmail($this->_email)){
+        if(!$this->_user = $this->user->getUserByEmail($this->_email)){
             return Response::return('No user found!',404);
         }
 
         if($this->checkUserWithToken()){
             User::updateUserSession($this->_user);
-            return Response::return(true,200);
+            return Response::return(true);
         }else{
             return Response::return(false,400);
         }
     }
 
-    public static function autologin(){
+    public function autologin(){
         // check if there is a user logged in
         if(User::is_loggedin()){
-            return Response::return(false,200);
+            return Response::return('You are already loggedin!');
         }
         // check if the user hash auto login checked from cookie
-        if(!Request::check('cookie',['email','token'])){
-            return Response::return(false,400);
+        if(!Cookie::check('email','token')){
+            return Response::return('');
         }
 
-        // login user using the token and email in hit cookie
-        $this->_token = $_COOKIE['token'];
-        $this->_email = $_COOKIE['email'];
+        $this->_email = Cookie::get('email');
+        $this->_token = Cookie::get('token');
 
         // logged in
         if($this->loginUsingCookieToken()){
-            header("Refresh:0;");
-            return Repsonse::return(true,200);
+            $this->updateToken();
+            User::updateUserSession($this->_user);
+            return Response::return('loggedin');
         }else{
             // wrong credentials
-            return Repsonse::return(false,400);
+            return Response::return('failed with your token!',400);
         }
     }
 }
