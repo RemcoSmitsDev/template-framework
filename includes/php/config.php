@@ -6,9 +6,9 @@ spl_autoload_register(function ($class_name) {
 });
 
 define('DB_HOST', 'localhost');
-define('DB_USER', 'root');
-define('DB_PASS', 'root');
-define('DB_NAME', 'remco_test');
+define('DB_USER', '{username}');
+define('DB_PASS', '{password}');
+define('DB_NAME', '{db_name}');
 // debug mode
 define('DEBUG_MODE', true);
 
