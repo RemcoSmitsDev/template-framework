@@ -30,12 +30,25 @@ class Route
         return false;
     }
 
-    public static function group(string $type, $func){
-        if(User::is_loggedin() && $_SESSION['_user']->Is_Admin == false){
+    public static function auth($func,$type = true){
+        if(User::is_loggedin() === $type){
             return $func(new Content);
         }else{
             return false;
         }
+    }
+
+    public static function admin(){
+        if(User::is_loggedin() && $_SESSION['_user']->Is_Admin ===  true){
+            return $func(new Content);
+        }else{
+            return false;
+        }
+    }
+
+    public static function redirect(string $to){
+        header('Location: '.$to);
+        exit;
     }
 }
 

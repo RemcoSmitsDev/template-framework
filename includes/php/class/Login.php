@@ -59,6 +59,7 @@ class Login
         if(Validate::password($this->_user->Password,$password,$this->_user->Salt)){
             User::updateUserSession($this->_user);
             $this->updateToken();
+            Route::redirect('/');
             return Response::return('loggedin');
         }else{
             return Response::return('Wrong password by email!',404);
@@ -109,6 +110,7 @@ class Login
         if($this->loginUsingCookieToken()){
             $this->updateToken();
             User::updateUserSession($this->_user);
+            Route::redirect('/');
             return Response::return('loggedin');
         }else{
             // wrong credentials
