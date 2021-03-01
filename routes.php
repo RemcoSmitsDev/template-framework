@@ -1,21 +1,26 @@
 <?php
 
 $request = Request::url();
-$content = new Content;
-
-$check =  false;
 
 
 // check for all routes
-if($request == '/'){
+Route::set('/', function (content $content){
     $content->set('home')->title('Home screen');
-}else if($request == '/login/'){
-    $content->set('login')->title('Login screen');
-}else if($request == '/register/'){
-    $content->set('register')->title('Register screen');
-}else{
-    $content->set('404')->title('404 NOT FOUND');
-}
+});
 
+Route::set('/login/', function (content $content){
+    $content->set('login')->title('Login screen');
+});
+
+Route::set('/register/', function (content $content){
+    $content->set('register')->title('Register screen');
+});
+
+// group routes to can only be access if the user is an admin
+// Route::group('auth', function (){
+//
+// });
+// show error/404 page if there are no matches to the current url
+Route::notFound();
 
  ?>
