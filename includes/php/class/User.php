@@ -29,7 +29,7 @@ class User
         session_destroy();
         unset($_SESSION['_user']);
         Cookie::remove('email','token');
-        header("Location: /login/");
+        Route::redirect("/login/");
         exit;
     }
 

@@ -30,8 +30,16 @@ class Route
         return false;
     }
 
-    public static function auth($func,$type = true){
-        if(User::is_loggedin() === $type){
+    public static function auth($func){
+        if(User::is_loggedin() === true){
+            return $func(new Content);
+        }else{
+            return false;
+        }
+    }
+
+    public static function noAuth($func){
+        if(User::is_loggedin() === false){
             return $func(new Content);
         }else{
             return false;
