@@ -5,39 +5,29 @@
  */
 class Content
 {
-    public $title;
+    public static $title = '';
+    public static $content = '';
 
     public static function view(){
-    	require_once($_SERVER['DOCUMENT_ROOT'] . "/templates/content-templates/".self::get().".php");
+    	require_once($_SERVER['DOCUMENT_ROOT'] . "/templates/content-templates/".self::$content.".php");
     }
 
     public function set(string $view){
-        $GLOBALS['content'] = $view;
+        self::$content = $view;
         return $this;
     }
 
     public function title(string $title){
-        $this->title = $title;
-        self::setTitle($title);
+        self::$title = $title;
         return $this;
     }
 
     public static function get(){
-        if(Request::check('global',['content'])){
-            return Response::return($GLOBALS['content'],200);
-        }
-        return Response::return('404',404);
-    }
-
-    public static function setTitle(string $title){
-        $GLOBALS['title'] = $title;
+        return self::$content;
     }
 
     public static function getTitle(){
-        if(Request::check('global','title')){
-            return Request::get('global','title');
-        }
-        return '';
+        return self::$title;
     }
 }
 
