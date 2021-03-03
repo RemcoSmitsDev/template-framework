@@ -1,4 +1,4 @@
-**Structuur versiebeheer** 
+**Structuur versiebeheer**
 
 Eerste getal | Staat voor de opgeleverde versie richting de klant;
 
@@ -11,13 +11,13 @@ Vierde getal | Staat voor de functionaliteit (matcht met de MS Planner kaart);
 Vijfde getal | Staat voor de wijziging;
 
 
-**Uitleg versiebeheer** 
+**Uitleg versiebeheer**
 
 0.2.25.12.3 Toevoegen dikgedrukte tekst
 
 In deze versie heb ik ervoor gezorgd dat de tekst dikgedrukt kan worden door op het B-icoontje te klikken.
 
-**Betekenis versiebeheer** 
+**Betekenis versiebeheer**
 
 0  | Er is nog geen versie opgeleverd naar de klant;
 
@@ -32,14 +32,4 @@ In deze versie heb ik ervoor gezorgd dat de tekst dikgedrukt kan worden door op 
 ---
 
 ## Contact
-Dit project is gerealiseerd door HJ Media Groep. Voor vragen kunt u contact opnemen met Jeroen (jeroen@hjmediagroep.nl). 
-Voor algemene vragen kunt u contact opnemen via ict@hjmediagroep.nl.
-
-
----
-
-## Copyright
-Niets uit dit project mag openbaar worden gemaakt door middel van druk, fotokopie, kopieren of welke andere wijze dan zonder voorafgaande schriftelijke toestemming van de eigenaar.
-
-
-©2020 HJ Media Groep  & Gereformeerde Bijbelstichting
+Dit project is gerealiseerd door Remco Smits. Voor vragen kunt u contact opnemen met Remco (remco@hjmediagroep.nl).
