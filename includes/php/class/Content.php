@@ -9,7 +9,12 @@ class Content
     public static $content = '';
 
     public static function view(){
-    	require_once($_SERVER['DOCUMENT_ROOT'] . "/templates/content-templates/".self::$content.".php");
+        $file = $_SERVER['DOCUMENT_ROOT'] . "/templates/content-templates/".self::$content.".php";
+        if(file_exists($file)){
+            require_once($file);
+        }else{
+            require_once($_SERVER['DOCUMENT_ROOT'] . "/templates/content-templates/404.php");
+        }
     }
 
     public function set(string $view){

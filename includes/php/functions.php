@@ -1,6 +1,7 @@
 <?php
 // define session
 session_start();
+ob_start();
 
 require_once(__dir__."/config.php");
 
