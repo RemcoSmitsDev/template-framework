@@ -5,9 +5,20 @@ Route::set('/', function (content $content){
     $content->set('home')->title('Home screen');
 })->name('home pagina');
 
-Route::set('/remco/{age}', function (content $content){
+// default denamic route
+// Route::set('/remco/{age}', function (content $content){
+//     $content->set('home')->title('Remco screen');
+// })->name('remco pagina');
+
+
+// check for specifik routs and urls that can be used but still dynamic
+Route::set('/remco', function (content $content){
     $content->set('home')->title('Remco screen');
 })->name('remco pagina');
+
+Route::set('/remco/{age}', function (content $content){
+    $content->set('home')->title('Remco screen');
+})->name('remco pagina')->urls(['/remco/1','/remco/3','/remco/20']);
 
 // routes with dynamic parameters
 Route::set('/{uitgaven}/{book}/{chapter}/', function (content $content){

@@ -13,7 +13,7 @@ class Content
         if(file_exists($file)){
             require_once($file);
         }else{
-            require_once($_SERVER['DOCUMENT_ROOT'] . "/templates/content-templates/404.php");
+            Route::$check = false;
         }
     }
 

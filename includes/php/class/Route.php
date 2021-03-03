@@ -8,7 +8,14 @@ class Route
 {
     public static $routes = [];
     public static $route;
+    public static $url;
     public static $check = false;
+    public static $valid_urls = array();
+
+    public function __construct(){
+        self::$url = Request::url();
+        self::$valid_urls = [];
+    }
 
     public static function notFound(){
         if(self::$check === false){
@@ -20,14 +27,13 @@ class Route
 
     // if you pass a parametes temp string like {name} then you can access the value from the url as global variable
     public static function checkParam(string $route){
-        $url = Request::url();
         // match the route tho the url and check if the placeholders bijv. {name} is passed in
-        if(preg_match_all("/\{(\w+)\}/",$route,$matches,PREG_OFFSET_CAPTURE) && preg_match("/".str_replace("/","\/",preg_replace("/\{\w+\}/","\w+",$route))."$/",$url)){
+        if(preg_match_all("/\{(\w+)\}/",$route,$matches,PREG_OFFSET_CAPTURE) && preg_match("/".str_replace("/","\/",preg_replace("/\{\w+\}/","\w+",$route))."$/",self::$url)){
             $matches = $matches[0];
             // set global variable for each parameters
             foreach ($matches as $key => $match) {
                 $pos = $match[1];
-                $values = explode("/",rtrim(substr($url,$pos),"/"));
+                $values = explode("/",rtrim(substr(self::$url,$pos),"/"));
                 foreach ($values as $key => $value) {
                     $GLOBALS[preg_replace("/\{|\}/","",$matches[$key][0])] = $value;
                 }
@@ -43,18 +49,20 @@ class Route
     public static function set(string $route, $func){
         // set current route from check list
         self::$route = $route;
+        self::$url = Request::url();
 
         // return if there is alreay a match with an url
         if(self::$check === true){
             return new self;
         }
 
-        $url = Request::url();
-
         //check if the route has passed in paraneters {id}
-        if(Request::url() === $route || self::checkParam($route)){
+        if(!empty(self::$valid_urls) && in_array(self::$url,self::$valid_urls) && self::checkParam($route)){
             self::$check = true;
-            $func(new Content);
+            call_user_func($func, new Content, self::$url);
+        }else if(empty(self::$valid_urls) && (self::$url === $route || self::checkParam($route))){
+            self::$check = true;
+            call_user_func($func, new Content, self::$url);
         }
         return new self;
     }
@@ -82,9 +90,17 @@ class Route
             return false;
         }
     }
+
     public static function name($string){
         self::addRouteInfo($string);
         return new self;
+    }
+
+    public static function urls($urls){
+        if(empty($urls)){
+            return false;
+        }
+        self::$valid_urls = $urls;
     }
 
     public static function addRouteInfo(string $name){
@@ -100,10 +116,16 @@ class Route
     }
 
     public static function redirect(string $url, $options = []){
-        // echo "string";
+        // if(Request::url() == $url){
+        //     return false;
+        // }
+
         if(!empty($options)){
             $url = explode("/",rtrim($url,"/"));
             $i = 0;
+            if(count($options) !== count($url)){
+                return false;
+            }
             foreach($url as $key => $value){
                 if(preg_match("/\{\w+\}/",$value)){
                     echo $url[$key] = $options[$i];
@@ -116,10 +138,6 @@ class Route
             header('Location: '.$url);
             exit;
         }
-
-        // header("Location: /remco");
-        // exit;
-        // echo "<script>history.pushState(null, '', '".$url."'); reloadView('{$url}');</script>";
         return;
     }
 }

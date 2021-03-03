@@ -1,6 +1,4 @@
 <?php
-
-// print_r(Request::check($_POST['email'],$_POST['password']));
 if(Request::check('post',['email','password'])){
     $login = new Login;
     echo $login->login($_POST['email'],$_POST['password']);

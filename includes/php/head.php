@@ -13,4 +13,5 @@
 	<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=0' />
 	<meta name='author' content='HJ Media Groep'>
 	<title><?= Content::getTitle(); ?> - <?= COMPANY_NAME ?></title>
-	<script defer src='/includes/javascript/general.js'></script>
+	<script src='/includes/javascript/jquery.js'></script>
+	<script src='/includes/javascript/general.js'></script>
