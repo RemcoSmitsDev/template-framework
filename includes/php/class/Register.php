@@ -11,8 +11,8 @@ class Register
 
     function __construct()
     {
-        $this->db = new Database();
         $this->user = new User();
+        $this->db = new Database();
     }
 
     public function registerNewUser(string $name, string $email, string $password, string $repeat_password){
@@ -51,16 +51,14 @@ class Register
 
         // hash password
         $salt = Hash::salt();
-
         $this->db->query("INSERT INTO users (Name,Email,Password,Salt) VALUES (:name,:email,:password,:salt)");
         $this->db->bind(":name",$name);
         $this->db->bind(":email",$email);
-        $this->db->bind(":pasword",Hash::password($password,$salt));
+        $this->db->bind(":password",Hash::password($password,$salt));
         $this->db->bind(":salt",$salt);
 
-        // check if something went wrong
         if($this->db->execute()){
-            $this->user->updateUserSession($this->user->getUserByEmail($email));
+            (new Login())->login($email, $password);
             return Response::return('Account created!',202);
         }else{
             return Response::return('Something went wrong when making an account!',400);

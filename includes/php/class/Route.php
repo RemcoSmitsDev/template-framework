@@ -68,7 +68,7 @@ class Route
     }
 
     public static function auth($func){
-        if(User::is_loggedin() === true){
+        if(User::is_loggedin()){
             return $func(new Content);
         }else{
             return false;
@@ -76,7 +76,7 @@ class Route
     }
 
     public static function noAuth($func){
-        if(User::is_loggedin() === false){
+        if(!User::is_loggedin()){
             return $func(new Content);
         }else{
             return false;
@@ -116,9 +116,9 @@ class Route
     }
 
     public static function redirect(string $url, $options = []){
-        // if(Request::url() == $url){
-        //     return false;
-        // }
+        if(Request::url() == $url){
+            return false;
+        }
 
         if(!empty($options)){
             $url = explode("/",rtrim($url,"/"));

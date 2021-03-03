@@ -26,8 +26,8 @@ class User
     }
 
     public static function logout(){
-        session_destroy();
         unset($_SESSION['_user']);
+        session_destroy();
         Cookie::remove('email','token');
         Route::redirect("/login/");
         exit;
