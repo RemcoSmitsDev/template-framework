@@ -10,11 +10,9 @@ class Route
     public static $route;
     public static $url;
     public static $check = false;
-    public static $valid_urls = array();
 
     public function __construct(){
         self::$url = Request::url();
-        self::$valid_urls = [];
     }
 
     public static function notFound(){
@@ -28,7 +26,7 @@ class Route
     // if you pass a parametes temp string like {name} then you can access the value from the url as global variable
     public static function checkParam(string $route){
         // match the route tho the url and check if the placeholders bijv. {name} is passed in
-        if(preg_match_all("/\{(\w+)\}/",$route,$matches,PREG_OFFSET_CAPTURE) && preg_match("/".str_replace("/","\/",preg_replace("/\{\w+\}/","\w+",$route))."$/",self::$url)){
+        if(preg_match_all("/\{(\w+)\}/",$route,$matches,PREG_OFFSET_CAPTURE) && preg_match("/".str_replace("/","\/",preg_replace("/\{\w+\}/","\w+",$route))."/",Request::url())){
             $matches = $matches[0];
             // set global variable for each parameters
             foreach ($matches as $key => $match) {
@@ -50,17 +48,12 @@ class Route
         // set current route from check list
         self::$route = $route;
         self::$url = Request::url();
-
         // return if there is alreay a match with an url
         if(self::$check === true){
             return new self;
         }
-
         //check if the route has passed in paraneters {id}
-        if(!empty(self::$valid_urls) && in_array(self::$url,self::$valid_urls) && self::checkParam($route)){
-            self::$check = true;
-            call_user_func($func, new Content, self::$url);
-        }else if(empty(self::$valid_urls) && (self::$url === $route || self::checkParam($route))){
+        if((self::$url === $route || self::checkParam($route))){
             self::$check = true;
             call_user_func($func, new Content, self::$url);
         }
@@ -96,12 +89,7 @@ class Route
         return new self;
     }
 
-    public static function urls($urls){
-        if(empty($urls)){
-            return false;
-        }
-        self::$valid_urls = $urls;
-    }
+
 
     public static function addRouteInfo(string $name){
         self::$routes[] = array("name" => $name,"route" => self::$route);
@@ -116,7 +104,7 @@ class Route
     }
 
     public static function redirect(string $url, $options = []){
-        if(Request::url() == $url){
+        if(Request::url() === $url){
             return false;
         }
 
