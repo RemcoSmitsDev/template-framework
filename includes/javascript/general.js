@@ -1,12 +1,14 @@
+var jqxhr = {abort: function () {}};
 $(function() {
     function reloadView(url = '/'){
         if(window.location.pathname ==  url){
             console.log('same');
             return;
         }
-        $.ajax({
+        jqxhr.abort();
+        jqxhr = $.ajax({
             async: true,
-            url:'/roles/user/page.php',
+            url:'/',
             dataType: "html",
             contentType: "application/json; charset=utf-8",
         })

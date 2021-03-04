@@ -1,29 +1,14 @@
 <?php
 
 // check for all routes
+
 Route::set('/', function (content $content){
     $content->set('home')->title('Home screen');
-})->name('home pagina');
-
-// default denamic route
-// Route::set('/remco/{age}', function (content $content){
-//     $content->set('home')->title('Remco screen');
-// })->name('remco pagina');
-
-
-// check for specifik routs and urls that can be used but still dynamic
-Route::set('/remco', function (content $content){
-    $content->set('home')->title('Remco screen');
-})->name('remco pagina');
+});
 
 Route::set('/remco/{age}', function (content $content){
     $content->set('home')->title('Remco screen');
-})->name('remco pagina')->urls(['/remco/1','/remco/3','/remco/20']);
-
-// routes with dynamic parameters
-Route::set('/{uitgaven}/{book}/{chapter}/', function (content $content){
-    $content->set('home')->title('Content screen');
-});
+})->urls(['/remco/1','/remco/4'])->name('remco');
 
 // middelware for routes that you need to be authenticated
 Route::auth(function (){
@@ -32,10 +17,8 @@ Route::auth(function (){
     });
 });
 
-
-// redirect to page with route name you can set parameters when your route has dynamic parameters
-// Route::view('remco pagina');
-// Route::view('remco pagina',[20,'remco']);
+// view a dynamic url using params
+// Route::view('remco',["age"=>1]);
 
 // middelware for routes that can only be accessed when there is no user loggedin
 Route::noAuth(function (){
@@ -50,9 +33,12 @@ Route::noAuth(function (){
 
 
 // middelware for routes that can only be accessed if the user is an admin
-Route::admin(function(){
-
-});
+// Route::admin(function(){
+//
+// });
 // show error/404 page if there are no matches to the current url
 Route::notFound();
+
+// init all routes and choose content by url
+Route::dispatch();
  ?>

@@ -1,5 +1,5 @@
 <?php
-if(Request::check('post',['email','password'])){
+if(Request::check('email','password')){
     $login = new Login;
     echo $login->login($_POST['email'],$_POST['password']);
 }

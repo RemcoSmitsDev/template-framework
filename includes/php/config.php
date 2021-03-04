@@ -1,5 +1,8 @@
 <?php
 
+// keeps session 1 hour if the user is inactive
+ini_set('session.gc_maxlifetime', 3600);
+
 // load all class files when someone calls a class
 spl_autoload_register(function ($class_name) {
     include __dir__.'/class/'.$class_name . '.php';

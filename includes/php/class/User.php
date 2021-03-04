@@ -11,7 +11,7 @@ class User
 
     function __construct()
     {
-        $this->db = new Database;
+        $this->db = new Database();
     }
 
     public function checkIfUserExist(string $email){
@@ -47,14 +47,14 @@ class User
         $this->db->bind(':email',$email);
 
         if($res = $this->db->single()){
-            return Response::return($res,200);;
+            return Response::return($res,200);
         }else{
             return Response::return(false,400);
         }
     }
 
     public static function is_loggedin(){
-        if(Request::check('session',['_user'])){
+        if(isset($_SESSION['_user']) && !empty($_SESSION['_user'])){
             return Response::return(true);
         }else{
             return Response::return(false);

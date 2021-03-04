@@ -16,14 +16,15 @@ class Request
         return Response::return(true,200);
     }
 
-    public static function check($type = 'post', $options = []){
+    public static function check(){
+        $options = func_get_args();
         if(empty($options)){
             return Response::return(false);
         }
         if(is_string($options)){
             $options = [$options];
         }
-        switch ($type) {
+        switch (strtolower($_SERVER['REQUEST_METHOD'])) {
             case 'post':
                 foreach ($options as $value) {
                     if(!isset($_POST[$value])){
@@ -77,7 +78,7 @@ class Request
     }
 
     public static function url(){
-        return $GLOBALS['request'] = urldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+        return urldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
     }
 }
 
